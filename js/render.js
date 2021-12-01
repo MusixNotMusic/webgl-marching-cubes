@@ -464,7 +464,8 @@ var fillcolormapSelector = function() {
 
 window.onload = function() {
     init("pkg/marching_cubes_bg.wasm").then(() => {
-        marchingCubes = MarchingCubes.new();
+		marchingCubes = MarchingCubes.new();
+		window.marchingCubes = marchingCubes;
         run();
     });
 }

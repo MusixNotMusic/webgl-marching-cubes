@@ -406,5 +406,59 @@ impl MarchingCubes {
         }
         unsafe { js_sys::Float32Array::view(&self.triangles[..]) }
     }
+
+    pub fn marching_cubes_between(&mut self, isovalue: f32, isovalue1: f32) -> js_sys::Float32Array {
+        self.triangles.clear();
+        let mut vals = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+        let mut vert = [0.0, 0.0, 0.0];
+        for k in 0..self.dims[2] - 1 {
+            for j in 0..self.dims[1] - 1 {
+                for i in 0..self.dims[0] - 1 {
+                    self.compute_vertex_values(i, j, k, &mut vals);
+                    let mut index = 0;
+                    for v in 0..8 {
+                        if vals[v] <= isovalue1 && isovalue <= vals[v] {
+                            index |= 1 << v;
+                        }
+                    }
+
+                    /* The cube vertex and edge indices for base rotation:
+                     *
+                     *      v7------e6------v6
+                     *     / |              /|
+                     *   e11 |            e10|
+                     *   /   e7           /  |
+                     *  /    |           /   e5
+                     *  v3------e2-------v2  |
+                     *  |    |           |   |
+                     *  |   v4------e4---|---v5
+                     *  e3  /           e1   /
+                     *  |  e8            |  e9
+                     *  | /              | /    y z
+                     *  |/               |/     |/
+                     *  v0------e0-------v1     O--x
+                     */
+
+                    // The triangle table gives us the mapping from index to actual
+                    // triangles to return for this configuration
+                    for t in TRI_TABLE[index].iter().take_while(|t| **t >= 0) {
+                        let v_idx = *t as usize;
+                        let v0 = EDGE_VERTICES[v_idx][0];
+                        let v1 = EDGE_VERTICES[v_idx][1];
+
+                        lerp_verts(&INDEX_TO_VERTEX[v0], &INDEX_TO_VERTEX[v1],
+                            vals[v0], vals[v1], isovalue, &mut vert);
+
+                        // Note: The vertex positions need to be placed on the dual grid,
+                        // since that's where the isosurface is computed and defined.
+                        self.triangles.push(vert[0] + i as f32 + 0.5);
+                        self.triangles.push(vert[1] + j as f32 + 0.5);
+                        self.triangles.push(vert[2] + k as f32 + 0.5);
+                    }
+                }
+            }
+        }
+        unsafe { js_sys::Float32Array::view(&self.triangles[..]) }
+    }
 }
 
