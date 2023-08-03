@@ -74,6 +74,7 @@ var volumes = {
 	"Foot": "foot_256x256x256_uint8.raw",
 	"Skull": "skull_256x256x256_uint8.raw",
 	"Aneurysm": "aneurism_256x256x256_uint8.raw",
+	"Cut": "cut_50x50x32_uint8.raw"
 };
 
 var colormaps = {
@@ -92,8 +93,11 @@ var loadVolume = function(selection, onload) {
 	
     var url = file;
     if (!selection.startsWith("local")) {
-        var url = "https://cdn.willusher.io/demo-volumes/" + file;
-    }
+        // var url = "https://cdn.willusher.io/demo-volumes/" + file;
+		var url = "/demo-volumes/" + file;
+    } else {
+		var url = "/demo-volumes/" + file;
+	}
 	var req = new XMLHttpRequest();
 	var loadingProgressText = document.getElementById("loadingText");
 	var loadingProgressBar = document.getElementById("loadingProgressBar");
