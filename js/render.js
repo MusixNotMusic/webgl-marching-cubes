@@ -74,7 +74,8 @@ var volumes = {
 	"Foot": "foot_256x256x256_uint8.raw",
 	"Skull": "skull_256x256x256_uint8.raw",
 	"Aneurysm": "aneurism_256x256x256_uint8.raw",
-	"Cut": "cut_50x50x32_uint8.raw"
+	"Cut": "cut_50x50x32_uint8.raw",
+	"Cut2": "cut_250x250x32_uint8.raw"
 };
 
 var colormaps = {
