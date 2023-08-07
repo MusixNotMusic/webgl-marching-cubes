@@ -454,9 +454,9 @@ impl MarchingCubes {
 
                         // Note: The vertex positions need to be placed on the dual grid,
                         // since that's where the isosurface is computed and defined.
-                        self.triangles.push((vert[0] + i as f32 + 0.5) / self.dims[0]);
-                        self.triangles.push((vert[1] + j as f32 + 0.5) / self.dims[1]);
-                        self.triangles.push((vert[2] + k as f32 + 0.5) / self.dims[2]);
+                        self.triangles.push((vert[0] + i as f32 + 0.5) / self.dims[0] as f32);
+                        self.triangles.push((vert[1] + j as f32 + 0.5) / self.dims[1] as f32);
+                        self.triangles.push((vert[2] + k as f32 + 0.5) / self.dims[2] as f32);
                     }
                 }
             }

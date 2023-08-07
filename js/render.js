@@ -1,4 +1,4 @@
-import init, {MarchingCubes} from "../pkg/marching_cubes.js";
+import __wbg_init, {MarchingCubes} from "../pkg/marching_cubes.js";
 
 var cubeStrip = [
 	1, 1, 0,
@@ -166,7 +166,9 @@ var renderLoop = function() {
         var computeTime;
         if (useWebASM.checked) {
             var t0 = performance.now();
-            triangles = marchingCubes.marching_cubes(parseFloat(currentIsovalue / 255.0));
+            // triangles = marchingCubes.marching_cubes(parseFloat(currentIsovalue / 255.0));
+            triangles = marchingCubes.marching_cubes_normalize(parseFloat(currentIsovalue / 255.0));
+			console.log('triangles ==>', triangles)
             var t1 = performance.now();
             computeTime = t1 - t0;
         } else {
@@ -469,7 +471,7 @@ var fillcolormapSelector = function() {
 }
 
 window.onload = function() {
-    init("pkg/marching_cubes_bg.wasm").then(() => {
+    __wbg_init("pkg/marching_cubes_bg.wasm").then(() => {
 		marchingCubes = MarchingCubes.new();
 		window.marchingCubes = marchingCubes;
         run();
